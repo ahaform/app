@@ -73,7 +73,7 @@ function getJSTemplate(data: any) {
     ;(async function(){
         try {
             // read from config ,ahaform base library,ahaform template
-            await Promise.all(['','']);
+            await Promise.all(['https://res.lingxi365.cn/lx/ahaform/ahaform.js','https://res.lingxi365.cn/lx/ahaform/ahaform.template.js'].map(i=>loadJs(i)));
             const template = new AhaFormTemplate.survey({
                 data: ${JSON.stringify(data)}
             })
