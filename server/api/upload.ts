@@ -80,8 +80,11 @@ function getJSTemplate(data: any) {
             new AhaForm('#ahaRoot', {
                 template,
                 submitResolve: function (res) {
-                    //可以动态注入脚本来处理,通过配置来处理
                     console.log('submit data --->', res)
+                    with(res){
+                        //injected code
+                        console.log(res)
+                    }
                 }
             }).init();
 
