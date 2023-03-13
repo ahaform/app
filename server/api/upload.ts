@@ -69,18 +69,37 @@ function getS3Client(config: {
 
 function getJSTemplate(data: any) {
   return `
+    // should minify 
+    ;(async function(){
+        try {
+            // read from config ,ahaform base library,ahaform template
+            await Promise.all(['','']);
+            const template = new AhaFormTemplate.survey({
+                data: ${JSON.stringify(data)}
+            })
+            new AhaForm('#ahaRoot', {
+                template,
+                submitResolve: function (res) {
+                    //可以动态注入脚本来处理,通过配置来处理
+                    console.log('submit data --->', res)
+                }
+            }).init();
 
-    //TODO:动态请求js基础文件,load完成后初始化
-
-    const template = new AhaFormTemplate.survey({
-        data: ${JSON.stringify(data)}
-    })
-    new AhaForm('#ahaRoot', {
-        template,
-        submitResolve: function (res) {
-            //可以动态注入脚本来处理,通过配置来处理
-            console.log('submit data --->', res)
+        } catch(ex){
+            console.log(ex);
         }
-    }).init();
+
+        function loadJs(src){
+
+            return new Promise((resolve,reject)=>{
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = ()=> resolve();
+                document.head.appendChild(script);
+            })
+        }
+    })();
+
+   
     `;
 }
