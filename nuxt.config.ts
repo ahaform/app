@@ -5,6 +5,6 @@ export default defineNuxtConfig({
         bucket:'',
         region:'',
         secret_access_key:'',
-        prefixPath:'/js/form'
+        prefixPath:'js/form'
     }
 })
