@@ -8,9 +8,11 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@types/uglify-js": "^3.17.1",
     "nuxt": "^3.2.3"
   },
   "dependencies": {
-    "aws-sdk": "^2.1333.0"
+    "aws-sdk": "^2.1333.0",
+    "uglify-js": "^3.17.4"
   }
 }

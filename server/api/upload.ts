@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import UglifyJS from "uglify-js";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -12,13 +13,24 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const template = getJSTemplate(data);
+  const templateOutput = getJSTemplate(data);
+
+  if (templateOutput.error) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "code minify error " + templateOutput.error,
+    });
+  }
 
   const { bucket, prefixPath, ...config } = useRuntimeConfig();
 
   const s3client = getS3Client(config);
 
-  const s3params = buildParams(bucket, `${prefixPath}/${path}`, template);
+  const s3params = buildParams(
+    bucket,
+    `${prefixPath}/${path}`,
+    templateOutput.code
+  );
 
   const uploadResult = await upload(s3client, s3params);
 
@@ -68,7 +80,7 @@ function getS3Client(config: {
 }
 
 function getJSTemplate(data: any) {
-  return `
+  return UglifyJS.minify(`
     // should minify 
     ;(async function(){
         try {
@@ -80,10 +92,10 @@ function getJSTemplate(data: any) {
             new AhaForm('#ahaRoot', {
                 template,
                 submitResolve: function (res) {
-                    console.log('submit data --->', res)
+                    console.log('submit data --->', res);
                     with(res){
                         //injected code
-                        console.log(res)
+                        console.log(res);
                     }
                 }
             }).init();
@@ -104,5 +116,5 @@ function getJSTemplate(data: any) {
     })();
 
    
-    `;
+    `);
 }
