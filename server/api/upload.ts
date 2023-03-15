@@ -13,7 +13,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const templateOutput = getJSTemplate(data);
+  const { bucket, prefixPath, ahaformBaseCdn, ahaformTemplateCdn, ...config } =
+    useRuntimeConfig();
+
+  const templateOutput = getJSTemplate(data, {
+    ahaformBaseCdn,
+    ahaformTemplateCdn,
+  });
 
   if (templateOutput.error) {
     throw createError({
@@ -21,8 +27,6 @@ export default defineEventHandler(async (event) => {
       statusMessage: "code minify error " + templateOutput.error,
     });
   }
-
-  const { bucket, prefixPath, ...config } = useRuntimeConfig();
 
   const s3client = getS3Client(config);
 
@@ -79,13 +83,15 @@ function getS3Client(config: {
   return new AWS.S3();
 }
 
-function getJSTemplate(data: any) {
+function getJSTemplate(data: any, options: any) {
   return UglifyJS.minify(`
     // should minify 
     ;(async function(){
         try {
             // read from config ,ahaform base library,ahaform template
-            await Promise.all(['https://res.lingxi365.cn/lx/ahaform/ahaform.js','https://res.lingxi365.cn/lx/ahaform/ahaform.template.js'].map(i=>loadJs(i)));
+            await Promise.all(['${options.ahaformBaseCdn}','${
+    options.ahaformTemplateCdn
+  }'].map(i=>loadJs(i)));
             const template = new AhaFormTemplate.survey({
                 data: ${JSON.stringify(data)}
             })
