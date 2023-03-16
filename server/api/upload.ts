@@ -95,7 +95,8 @@ function getJSTemplate(data: any, options: any) {
             const template = new AhaFormTemplate.survey({
                 data: ${JSON.stringify(data)}
             })
-            new AhaForm('#ahaRoot', {
+            const app = document.querySelector('#ahaRoot') || document.querySelector("body > pt-experience").shadowRoot.querySelector('#ahaRoot');
+            new AhaForm(app, {
                 template,
                 submitResolve: function (res) {
                     console.log('submit data --->', res);
