@@ -4,7 +4,7 @@ import UglifyJS from "uglify-js";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  const { path, data } = body;
+  const { path, appId, shadowHost, data } = body;
 
   if (!path) {
     throw createError({
@@ -13,12 +13,18 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { bucket, prefixPath, ahaformBaseCdn, ahaformTemplateCdn, ...config } =
-    useRuntimeConfig();
+  const {
+    prefixPath,
+    ahaformBaseCdn,
+    ahaformTemplateCdn,
+    s3: { bucket, ...config },
+  } = useRuntimeConfig();
 
   const templateOutput = getJSTemplate(data, {
     ahaformBaseCdn,
     ahaformTemplateCdn,
+    appId,
+    shadowHost,
   });
 
   if (templateOutput.error) {
@@ -83,9 +89,20 @@ function getS3Client(config: {
   return new AWS.S3();
 }
 
-function getJSTemplate(data: any, options: any) {
+/**
+ * @fix TODO://需要babel做一下代码降级，否则兼容性太差
+ * @param data
+ * @param options
+ * @returns
+ */
+function getJSTemplate(data: unknown, options: any) {
+  const { appId = "ahaRoot", shadowHost } = options;
+  const queryCodes = [`document.querySelector('#${appId}')`];
+  shadowHost &&
+    queryCodes.push(
+      `document.querySelector('${shadowHost}').shadowRoot.querySelector('#${appId}')`
+    );
   return UglifyJS.minify(`
-    // should minify 
     ;(async function(){
         try {
             // read from config ,ahaform base library,ahaform template
@@ -95,7 +112,7 @@ function getJSTemplate(data: any, options: any) {
             const template = new AhaFormTemplate.survey({
                 data: ${JSON.stringify(data)}
             })
-            const app = document.querySelector('#ahaRoot') || document.querySelector("body > pt-experience").shadowRoot.querySelector('#ahaRoot');
+            const app = ${queryCodes.join("||")};
             new AhaForm(app, {
                 template,
                 submitResolve: function (res) {
@@ -121,7 +138,5 @@ function getJSTemplate(data: any, options: any) {
             })
         }
     })();
-
-   
     `);
 }
