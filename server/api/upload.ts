@@ -17,7 +17,8 @@ export default defineEventHandler(async (event) => {
     prefixPath,
     ahaformBaseCdn,
     ahaformTemplateCdn,
-    s3: { bucket, ...config },
+    bucket,
+    ...config
   } = useRuntimeConfig();
 
   const templateOutput = getJSTemplate(data, {
