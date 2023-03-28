@@ -8,7 +8,7 @@ definePageMeta({
 //TODO 待重构： hooks 抽取
 
 const open = (callback: (path: string) => void) => {
-    ElMessageBox.prompt('请输入发布路径', 'Tip', {
+    ElMessageBox.prompt('请输入发布路径', '表单发布', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
     })
