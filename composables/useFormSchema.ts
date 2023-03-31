@@ -124,10 +124,16 @@ export const useFormSchema = (data: any) => {
     return schema.filter((s) => s.props.includeUnit).map((s) => s.props.name);
   });
 
+  const ratio = 16;
   watch(currentUnit, (currUnit, prevUnit) => {
     if (currUnit !== prevUnit) {
       //更新key单元
-      keysWithUnit.value.forEach((key) => (data[key].unit = currUnit));
+      keysWithUnit.value.forEach((key) => {
+        const currValue = data[key].value;
+        data[key].unit = currUnit;
+        data[key].value =
+          currUnit === "px" ? Math.floor(currValue * ratio) : currValue / ratio;
+      });
     }
   });
 

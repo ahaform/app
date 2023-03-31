@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+const emit = defineEmits(['content-update']);
+
 const props = defineProps<{
     config: any
 }>();
@@ -12,6 +14,14 @@ const { fontUnitOptions, schema, currentUnit } = useFormSchema(data);
 
 const activeTab = ref('content');
 
+onMounted(()=>{
+    emit('content-update',data);
+});
+
+
+watch(data, () => {
+    emit('content-update',data);
+})
 
 </script>
 
