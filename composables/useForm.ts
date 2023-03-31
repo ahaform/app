@@ -42,8 +42,7 @@ export function useForm() {
           completeSubtitleColor: "#181818",
           completeDescriptionFontSize: { unit: "px", value: "18" },
           completeDescriptionColor: "#3B3B3B",
-          formData:
-            '[{"id":"test","tagline":"111","title":"11","required":true,"type":"text","keepAlive":false,"multiple":false,"allowOther":false,"helpTextShow":false},{"id":"2","tagline":"2","title":"2","required":true,"type":"text","keepAlive":false,"multiple":false,"allowOther":false,"helpTextShow":false},{"id":"__complete","title":"2额 ","subtitle":"","description":"","showSubmit":false},{"id":"test","tagline":"test","title":"","required":true,"type":"choice","keepAlive":false,"multiple":false,"allowOther":false,"helpTextShow":false,"options":[{"label":"1","value":"1"},{"label":"2","value":"2","imageSrc":""},{"label":"3","value":"3","imageSrc":""}]}]',
+          formData:'[{"type":"choice","originalType":"choice","required":true,"title":"这里是一个问题的标题","multiple":false,"maxSelectNum":9999,"isShowText":true,"id":"TUgP2Xwwzm","options":[{"value":"这里是选项1","label":"这里是选项1"},{"value":"这里是选项2","label":"这里是选项2"},{"value":"这里是选项3","label":"这里是选项3"}],"allowOther":false,"otherPrompt":""},{"type":"picture-choice","originalType":"picture-choice","required":true,"title":"这里是一个图片选择问题的标题","multiple":false,"maxSelectNum":9999,"isShowText":true,"id":"k2TW3_MKkP","options":[{"imageSrc":"","label":"这里是选项1"}],"allowOther":false},{"type":"text","required":true,"placeholder":"请输入","title":"这里是一个短文本问题的标题","id":"mDpupZMb7S"},{"type":"long-text","required":true,"placeholder":"请输入","title":"这里是一个长文本问题的标题","id":"dvYroS5P_6"},{"type":"phone","required":true,"placeholder":"请输入您的手机号码","title":"这里是一个手机号码问题的标题","id":"UAXMNmCQoq","defaultCountry":"jp"},{"type":"score","required":true,"title":"这里是一个打分问题的标题","range":[1,5],"id":"U_XEKimhCR","scoreMinTag":"","scoreMaxTag":""},{"id":"__complete","showSubmit":false,"endPageData":[{"type":"title","text":"这里是结束页的标题"},{"type":"description","text":"这里是结束页的描述文字"},{"type":"button","text":"OK","action":{"type":"close","url":"","isOpenInNewBrowser":false}}]}]'
         });
       });
     });
@@ -65,7 +64,7 @@ export function useForm() {
           id: "03fa9de5-679b-4273-b282-0626dd798370",
           name: "pt-flow-form",
           bundleUrl:
-            "https://ecstatic.ptengine.com/ecp/1b35d857-3f52-4d6e-911c-70e4a6062481/app/03fa9de5-679b-4273-b282-0626dd798370/0.1.0/bundle.js",
+            "https://ecstatic.ptengine.com/sdk/ahaform/bundle.js",
           config: {
             data: {
               ...data,
